@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>OPT Client</title>
+    {% load static %}
+    <title>Static File Debug</title>
+    <p>STATIC_URL: {{ STATIC_URL }}</p>
+    <p>Resolved path: {% static 'css/style.css' %}</p>
 </head>
 <body>
-    <h1>OTP Client</h1>
 </body>
 </html>
