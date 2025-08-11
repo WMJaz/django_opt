@@ -1,0 +1,104 @@
+<!-- Dynamic Modals -->
+<div class="modal fade" id="mdl-informational" tabindex="-1" role="dialog" aria-labelledby="mdl-informational" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="py-3 text-center">
+                    <div class="form-group" id="mdl-informational-logo"></div>
+                    <div class="form-group" id="mdl-informational-title"></div>
+                    <div class="form-group" id="mdl-informational-description"></div>
+                </div>
+                <div class="form-group text-center mb-0">
+                    <button type="button" class="btn" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdl-yesno" tabindex="-1" role="dialog" aria-labelledby="mdl-yesno" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="py-3 text-center">
+                    <div class="form-group" id="mdl-yesno-logo"></div>
+                    <div class="form-group" id="mdl-yesno-title"></div>
+                    <div class="form-group" id="mdl-yesno-description"></div>
+                </div>
+                <div class="form-group text-center mb-0">
+                    <button type="button" class="btn" data-dismiss="modal" id="mdl-yesno-confirm">YES</button>
+                    <button type="button" class="btn btn-block btn-lg btn-outline-secondary" data-dismiss="modal">NO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Dynamic Modals -->
+
+<!-- Dynamic Modals Script -->
+<script>
+    function ModalShow_Informational(mdlconfig){
+        var mdl_informational = $("#mdl-informational");
+        var mdl_title = mdl_informational.find('#mdl-informational-title');
+        var mdl_description = mdl_informational.find('#mdl-informational-description');
+        var mdl_logo = mdl_informational.find('#mdl-informational-logo');
+        var mdl_button = mdl_informational.find('button')
+
+        mdl_title.empty();
+        mdl_title.append('<h4 class="text-' + mdlconfig['mdl_color'] + ' mt-4">' + mdlconfig['mdl_title'] + '</h4>');
+
+        mdl_description.empty();
+        mdl_description.append('<p>' + mdlconfig['mdl_description'] + '</p>');
+
+        mdl_logo.empty();
+        mdl_logo.append('<i class="' + mdlconfig['mdl_logo'] +' fa-5x text-' + mdlconfig['mdl_color'] +'"></i>');
+
+        mdl_button.removeClass();
+        mdl_button.addClass('btn btn-block btn-lg btn-' + mdlconfig['mdl_color']);
+
+        mdl_informational.modal('show');
+    }
+    
+    function ModalShow_YesNo(mdlconfig,callback){
+        var mdl_yesno = $("#mdl-yesno");
+        var mdl_title = mdl_yesno.find('#mdl-yesno-title');
+        var mdl_description = mdl_yesno.find('#mdl-yesno-description');
+        var mdl_logo = mdl_yesno.find('#mdl-yesno-logo');
+        var mdl_button = mdl_yesno.find('#mdl-yesno-confirm')
+
+        mdl_title.empty();
+        mdl_title.append('<h4 class="text-' + mdlconfig['mdl_color'] + ' mt-4">' + mdlconfig['mdl_title'] + '</h4>');
+
+        mdl_description.empty();
+        mdl_description.append('<p>' + mdlconfig['mdl_description'] + '</p>');
+
+        mdl_logo.empty();
+        mdl_logo.append('<i class="' + mdlconfig['mdl_logo'] +' fa-5x text-' + mdlconfig['mdl_color'] +'"></i>');
+
+        mdl_button.removeClass();
+        mdl_button.addClass('btn btn-block btn-lg btn-' + mdlconfig['mdl_color']);
+
+        mdl_yesno.modal('show');
+        
+        mdl_button.unbind();
+        mdl_button.click(function() {
+            callback();    
+        });
+    }
+</script>
+<!-- Dynamic Modals Script -->
+
+<script>
+    function AlertShow(alrconfig, htmlelem) {
+        // Ensure htmlelem is a jQuery object
+        htmlelem = $(htmlelem);
+        // Create the alert HTML
+        var alrt = '<div class="alert alert-' + alrconfig['alr_color'] + ' alert-dismissible fade show mx-4" role="alert" data-dismiss="alert" aria-label="Close" style="cursor: pointer;">' +
+                    '<i class="' + alrconfig['alr_logo'] + '"></i>' +
+                    '<span class="mx-2 font-weight-bold">' + alrconfig['alr_msg'] + '</span>' +
+                '</div>';
+
+        // Replace existing content or append/prepend the alert
+        htmlelem.html(alrt);
+    }
+</script>

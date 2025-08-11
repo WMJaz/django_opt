@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Head Part -->
+    {% load static %}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            {% block title %}
+            
+            {% endblock %}
+        </title>
+        <!-- Custom fonts for this template-->
+        <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'css/fonts.css' %}" rel="stylesheet">
+        <!-- Custom styles for this template-->
+        <link href="{% static 'css/sb-admin-3.css' %} " rel="stylesheet">
+        <link href="{% static 'css/bootstrap-steps.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/timeline.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/cropperjs/cropper.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <style>
+            .loader{
+                position: fixed;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                background: url("{% static 'img/loading.gif' %}") 
+                            50% 50% no-repeat rgb(249,249,249);
+                opacity: 0.8;
+                }
+        </style>
+        
+        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'vendor/charts/dist/chart.min.js' %}"></script>
+        <script src="{% static 'vendor/charts/dist/chartlabels.min.js' %}"></script>
+        <script src="{% static 'vendor/cropperjs/cropper.min.js' %}"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+    </head>
+    <!-- Body Part -->
+    <body id="page-top">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+            <!-- Sidebar -->
+            {% include 'base_content/base_sidebar.html' %}
+            <!-- End of Sidebar -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+                <!-- Main Content -->
+                <div id="content">
+                    <!-- Navbar -->
+                    {% include 'base_content/base_navbar.html' %}
+                    <!-- End of Navbar -->
+
+                    <!-- Begin Page Content -->
+                    <div class="mx-2 accordion">
+                        {% block content %}
+                        
+                        {% endblock %}
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+                {% include 'base_content/base_footer.html' %}
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+        {% include 'base_content/base_plugins.html' %}
+    </body>
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+    <script>
+        const cardBody = document.querySelector('.fixed-card-height');
+        if (cardBody) {
+            cardBody.addEventListener('scroll', function() {
+                const tolerance = 5;
+                if (cardBody.scrollHeight - cardBody.scrollTop <= cardBody.clientHeight + tolerance) {
+                    cardBody.classList.add('no-shadow');
+                } else {
+                    cardBody.classList.remove('no-shadow');
+                }
+            });
+        }
+    </script>
+</html>
