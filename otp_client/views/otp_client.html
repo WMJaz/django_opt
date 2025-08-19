@@ -109,6 +109,7 @@
                         "mdl_logo" : 'fas fa-check',
                         "mdl_color" : 'success'
                     });
+                    $('#mdl-informational').one('hidden.bs.modal', () => window.location.reload());
                 }
                 else if (response.status === 'error') {
                     ModalShow_Informational({

@@ -24,4 +24,3 @@ def send_sms_http(contact_number, sms_message):
     if response.status_code != 200:
         return False
     return True
-
