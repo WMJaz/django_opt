@@ -1,0 +1,156 @@
+{% extends 'base_content/base_app.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="card bg-custom-dark3">
+            <div class="card-header bg-custom-dark2">
+                <span class="text-white font-weight-bold h5"> SMS Sender </span>
+            </div>
+            <div class="card-body">  
+                <form name="frm-sms">
+                    <div class="form-group">
+                        <label class="text-white">Enter Mobile Number (11 Digit Format)</label>
+                        <input type="text" class="form-control bg-dark" placeholder="Enter Mobile Number" name="txt_cpno" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-white">Enter Your Message (<span name="lbl-character-ctr" class="text-danger">0/153</span>)</label>
+                        <textarea type="text" class="form-control bg-dark" placeholder="Enter your message here" rows="5" maxlength="153" name="txt_message" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-custom1">Confirm OTP</button>
+                    </div>
+                </form>   
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+<script>
+    const csrfToken = getCookie('csrftoken');
+    
+    function SendSMS(cpno,msg){
+        var request_dt = {
+            'mobileno'    : cpno,
+            'message'     : msg
+        }
+
+        $.ajax({
+            url: "{% url 'send_sms' %}",
+            type: 'POST',
+            contentType: false, 
+            processData: false,
+            headers: { "X-CSRFToken": csrfToken },
+            data: AjaxRequests(request_dt),
+            beforeSend: function() {
+                $("body").prepend('<div class="loader" id="loadingscreen"></div>');
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    ModalShow_Informational({
+                        "mdl_title" : 'SMS Sent',
+                        "mdl_description" : 'The SMS was sent successfully ',
+                        "mdl_logo" : 'fas fa-check',
+                        "mdl_color" : 'success'
+                    });
+                    $('#mdl-informational').one('hidden.bs.modal', () => window.location.reload());
+                }
+                else{
+                    ModalShow_Informational({
+                        "mdl_title" : 'Process Error',
+                        "mdl_description" : 'Something went wrong during the process. Please try again later',
+                        "mdl_logo" : 'fas fa-exclamation-triangle',
+                        "mdl_color" : 'danger'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                ModalShow_Informational({
+                    "mdl_title" : 'Process Error',
+                    "mdl_description" : 'Something went wrong during the process. Please try again later',
+                    "mdl_logo" : 'fas fa-exclamation-triangle',
+                    "mdl_color" : 'danger'
+                });
+            },
+            complete: function() {
+                $("#loadingscreen").remove();
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        const maxChars = 153;
+        const frm_sms = $('form[name="frm-sms"]');
+        const $txt_cpno = frm_sms.find('input[name="txt_cpno"]');
+        const $txt_message = frm_sms.find('textarea[name="txt_message"]');
+        const $lbl_character_ctr = frm_sms.find('span[name="lbl-character-ctr"]');
+         
+        $txt_message.on('input', function() {
+            let text = $(this).val();
+            if (text.length > maxChars) {
+                text = text.substring(0, maxChars); // trim extra chars
+                $(this).val(text);
+            }
+            $lbl_character_ctr.text(text.length + '/' + maxChars);
+        });
+
+        frm_sms.on('submit', function(e) {
+            e.preventDefault();
+            var cpno = $txt_cpno.val();
+            var sms_msg = $txt_message.val();
+
+            if (!cpno) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Required Mobile Number',
+                    "mdl_description"   : 'Mobile number is required.',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            } else if (cpno.length !== 11) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Invalid Mobile Number',
+                    "mdl_description"   : 'Cellphone number must be exactly 11 digits.',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            } else if (!/^09\d{9}$/.test(cpno)) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Invalid Mobile Number',
+                    "mdl_description"   : 'Invalid cellphone number format. It should start with 09, and should not contain non-number.',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            } else if (! sms_msg.length > 0) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Invalid Message',
+                    "mdl_description"   : 'Please enter your message. Do not leave it empty',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            } else if (sms_msg.length > maxChars) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Invalid Message',
+                    "mdl_description"   : `Your message exceeded the maximum limit of ${maxChars} characters only.`,
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            }
+
+            ModalShow_YesNo({
+                "mdl_title" : 'Send SMS',
+                "mdl_description" : `Do you want to send message to: ${cpno}?`,
+                "mdl_logo" : 'fas fa-question-circle',
+                "mdl_color" : 'info'
+            }, function() {
+                SendSMS(cpno,sms_msg);
+            });
+        });
+    }); 
+</script>
+{% endblock %}

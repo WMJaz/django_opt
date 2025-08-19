@@ -1,0 +1,88 @@
+.selectedDevice {
+  background-color: lightblue;
+  border-style: dashed;
+}
+.specialheader {
+  width: 100%; 
+  text-align: center; 
+  border-bottom: 1px solid var(--custheme_dark1);
+  line-height: 0.1em;
+  margin: 10px 0 20px; 
+} 
+.specialheader span { 
+  background: var(--custheme_dark1); 
+  padding:0 10px; 
+}
+.nav-scrollable {
+  display: flex;
+  flex-wrap: nowrap; /* Prevents wrapping to a new line */
+  overflow-x: auto;  /* Enables horizontal scrolling */
+  white-space: nowrap; /* Ensures items stay in a single line */
+  -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on mobile */
+  background: transparent; /* Ensures the background is transparent */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #4e73df transparent; /* Custom colors */
+}
+
+/* Optional: Styling the nav item buttons */
+.nav-scrollable .nav-item {
+  flex-shrink: 0; /* Prevents shrinking of nav items */
+  background: transparent; /* Ensures no background behind buttons */
+}
+
+@media (max-width: 479px) {
+  .nav-scrollable {
+      scrollbar-width: none; /* Firefox */
+  }
+
+  .nav-scrollable::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Edge */
+  }
+}
+
+.fixed-card-height-580 {
+  height: 580px;
+  overflow-y: auto;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #616161 transparent; /* Custom colors */
+  box-shadow: inset 0 -15px 8px -8px rgba(0, 0, 0, 0.15); /* Initial shadow */
+}
+
+.fixed-card-height-580.no-shadow {
+  box-shadow: none;
+}
+
+.fixed-card-height-580::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fixed-card-height-580::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.fixed-card-height-402 {
+  height: 402px;
+  overflow-y: auto;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #616161 transparent; /* Custom colors */
+  box-shadow: inset 0 -15px 8px -8px rgba(0, 0, 0, 0.15); /* Initial shadow */
+}
+
+.fixed-card-height-402.no-shadow {
+  box-shadow: none;
+}
+
+.fixed-card-height-402::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fixed-card-height-402::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+
+
+
+

@@ -1,0 +1,71 @@
+{% extends 'base_content/base_app.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="form-group">
+        <h2 class="text-warning font-weight-bold">Application List</h2>
+    </div>
+    <div class="row">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+            <div class="card" style="min-height: 250px;">
+                <div class="card-body bg-custom-dark3 d-flex flex-column">
+                    <div class="text-center">
+                        <i class="fa fa-sms fa-3x my-4 text-white" aria-hidden="true"></i>
+                        <p class="text-wrap">
+                            <span class="font-weight-bold text-white">SMS Sender App</span> - Test sending your message.
+                            Provide 11 digit mobile number and your message.
+                            (153 character max)
+                        </p>
+                    </div>
+                    <a class="text-warning mt-auto text-center" href="{% url 'render_sms' %}">
+                        Go To App
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+            <div class="card" style="min-height: 250px;">
+                <div class="card-body bg-custom-dark3 d-flex flex-column">
+                    <div class="text-center">
+                        <i class="fa fa-unlock fa-3x my-4 text-white" aria-hidden="true"></i>
+                        <p class="text-wrap">
+                            <span class="font-weight-bold text-white">One-Time-Password</span> - Test sending an OTP via SMS.
+                            Provide 11 digit mobile number. Then verify the
+                            Eight (8) Digit OTP.
+                        </p>
+                    </div>
+                    <a class="text-warning mt-auto text-center" href="{% url 'render_otp' %}">
+                        Go To App
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+            <div class="card" style="min-height: 250px;">
+                <div class="card-body bg-custom-dark3 d-flex flex-column">
+                    <div class="text-center">
+                        <i class="fa fa-bolt fa-3x my-4 text-white" aria-hidden="true"></i>
+                        <p class="text-wrap">
+                            <span class="font-weight-bold text-white">Fast-API</span> - Test Fast API.
+                        </p>
+                    </div>
+                    <a class="text-warning mt-auto text-center" href="{% url 'render_applists' %}">
+                        Go To App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</div>
+
+<script>
+    $(document).ready(function() {
+        
+    }); 
+</script>
+{% endblock %}

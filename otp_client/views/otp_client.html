@@ -1,0 +1,215 @@
+{% extends 'base_content/base_app.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="card bg-custom-dark3">
+            <div class="card-header bg-custom-dark2">
+                <span class="text-white font-weight-bold h5"> OTP Sender </span>
+            </div>
+            <div class="card-body">
+                <form name="frm-request-otp">
+                    <div class="form-group">
+                        <label class="text-white">Enter Mobile Number (11 Digit Format)</label>
+                        <input type="text" class="form-control bg-dark" placeholder="Enter Mobile Number" name="txt_cpno" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-custom1">Send OTP</button>
+                    </div>
+                </form>    
+                <form name="frm-verify-otp">
+                    <div class="form-group">
+                        <label class="text-white">Enter OTP immediately</label>
+                        <input type="text" class="form-control bg-dark" placeholder="Enter OTP" name="txt_otp" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-custom1">Confirm OTP</button>
+                    </div>
+                </form>   
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+<script>
+    const csrfToken = getCookie('csrftoken');
+    var tmp_contact = null;
+
+    function generate_OTP(cpno){
+        var request_dt = {
+            'mobileno'    : cpno
+        }
+        
+        $.ajax({
+            url: "{% url 'request_otp' %}",
+            type: 'POST',
+            contentType: false, 
+            processData: false,
+            headers: { "X-CSRFToken": csrfToken },
+            data: AjaxRequests(request_dt),
+            beforeSend: function() {
+                $("body").prepend('<div class="loader" id="loadingscreen"></div>');
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    tmp_contact = cpno;
+                    ModalShow_Informational({
+                        "mdl_title" : 'OTP Sent',
+                        "mdl_description" : 'OTP Sent ',
+                        "mdl_logo" : 'fas fa-check',
+                        "mdl_color" : 'success'
+                    });
+                }
+                else{
+                    ModalShow_Informational({
+                        "mdl_title" : 'Process Error',
+                        "mdl_description" : 'Something went wrong during the process. Please try again later',
+                        "mdl_logo" : 'fas fa-exclamation-triangle',
+                        "mdl_color" : 'danger'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                ModalShow_Informational({
+                    "mdl_title" : 'Process Error',
+                    "mdl_description" : 'Something went wrong during the process. Please try again later',
+                    "mdl_logo" : 'fas fa-exclamation-triangle',
+                    "mdl_color" : 'danger'
+                });
+            },
+            complete: function() {
+                $("#loadingscreen").remove();
+            }
+        });
+    }
+
+
+    function verify_OTP(otp,cpno){
+        var request_dt = {
+            'mobileno'    : cpno,
+            'otp'         : otp
+        }
+
+        $.ajax({
+            url: "{% url 'verify_otp' %}",
+            type: 'POST',
+            contentType: false, 
+            processData: false,
+            headers: { "X-CSRFToken": csrfToken },
+            data: AjaxRequests(request_dt),
+            beforeSend: function() {
+                $("body").prepend('<div class="loader" id="loadingscreen"></div>');
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    ModalShow_Informational({
+                        "mdl_title" : 'OTP Verified',
+                        "mdl_description" : 'The OTP was verified successfully ',
+                        "mdl_logo" : 'fas fa-check',
+                        "mdl_color" : 'success'
+                    });
+                    $('#mdl-informational').one('hidden.bs.modal', () => window.location.reload());
+                }
+                else if (response.status === 'error') {
+                    ModalShow_Informational({
+                        "mdl_title" : 'Invalid OTP',
+                        "mdl_description" : 'The OTP is invalid',
+                        "mdl_logo" : 'fas fa-exclamation-triangle',
+                        "mdl_color" : 'danger'
+                    });
+                }
+                else{
+                    ModalShow_Informational({
+                        "mdl_title" : 'Process Error',
+                        "mdl_description" : 'Something went wrong during the process. Please try again later',
+                        "mdl_logo" : 'fas fa-exclamation-triangle',
+                        "mdl_color" : 'danger'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                ModalShow_Informational({
+                    "mdl_title" : 'Process Error',
+                    "mdl_description" : 'Something went wrong during the process. Please try again later',
+                    "mdl_logo" : 'fas fa-exclamation-triangle',
+                    "mdl_color" : 'danger'
+                });
+            },
+            complete: function() {
+                $("#loadingscreen").remove();
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        const frm_request_otp = $('form[name="frm-request-otp"]');
+        const frm_confirm_otp = $('form[name="frm-verify-otp"]');
+        
+        
+        frm_request_otp.on('submit', function(e) {
+            e.preventDefault();
+            var cpno = $(this).find('input[name="txt_cpno"]').val();
+            if (!cpno) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Required Mobile Number',
+                    "mdl_description"   : 'Mobile number is required.',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            } else if (cpno.length !== 11) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Invalid Mobile Number',
+                    "mdl_description"   : 'Cellphone number must be exactly 11 digits.',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            } else if (!/^09\d{9}$/.test(cpno)) {
+                ModalShow_Informational({
+                    "mdl_title"         : 'Invalid Mobile Number',
+                    "mdl_description"   : 'Invalid cellphone number format. It should start with 09, and should not contain non-number.',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return;
+            }
+
+            ModalShow_YesNo({
+                "mdl_title" : 'Send OTP Request',
+                "mdl_description" : `Do you want to send OTP to: ${cpno}?`,
+                "mdl_logo" : 'fas fa-question-circle',
+                "mdl_color" : 'info'
+            }, function() {
+                generate_OTP(cpno);
+            });
+        });
+
+        frm_confirm_otp.on('submit', function(e) {
+            e.preventDefault();
+            var cpno = tmp_contact;
+            var otp = $(this).find('input[name="txt_otp"]').val();
+
+            if (!cpno) {
+               ModalShow_Informational({
+                    "mdl_title"         : 'No OTP was requested',
+                    "mdl_description"   : 'Please request an OTP first.',
+                    "mdl_logo"          : 'fas fa-exclamation',
+                    "mdl_color"         : 'danger'
+                });
+                return; 
+            }
+
+            ModalShow_YesNo({
+                "mdl_title" : 'Verify OTP',
+                "mdl_description" : `Do you want to verify OTP?`,
+                "mdl_logo" : 'fas fa-question-circle',
+                "mdl_color" : 'info'
+            }, function() {
+                verify_OTP(otp,cpno);
+            });
+        });
+    }); 
+</script>
+{% endblock %}
